@@ -16,7 +16,7 @@ jobs:
       - name: Assign issue creator
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT }}
           script: |
             const issueCreator = context.payload.issue.user.login;
             github.rest.issues.addAssignees({
