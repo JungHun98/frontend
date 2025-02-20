@@ -1,5 +1,10 @@
 name: Auto Create Pull Request
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 on:
   push:
     branches:
