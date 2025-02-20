@@ -1,5 +1,10 @@
 name: Auto Assign Issue Creator
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 on:
   issues:
     types: [opened]
