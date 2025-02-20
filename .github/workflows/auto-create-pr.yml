@@ -89,11 +89,12 @@ jobs:
           echo "$summary" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Create Pull Request (with Assignees)
+      - name: Create Pull Request (with Assignees & Reviewers)
         if: ${{ !env.EXISTED }}
         run: |
           gh pr create --title "${{ env.PR_TITLE }}" --body "${{ env.PR_BODY }}" --base "develop" \
-            --label "${{ env.LABELS }}" --assignee "${{ env.ASSIGNEES }}"
+            --label "${{ env.LABELS }}" --assignee "${{ env.ASSIGNEES }}" \
+            --reviewer "chlwlstlf,JungHun98"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
