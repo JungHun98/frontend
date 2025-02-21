@@ -23,6 +23,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check if branch exists remotely
+        run: |
+          git fetch origin
+          if ! git ls-remote --exit-code --heads origin ${{ env.BRANCH_NAME }}; then
+            echo "Branch ${{ env.BRANCH_NAME }} does not exist remotely. Exiting workflow."
+            exit 1
+          fi
+
       - name: Extract Branch Prefix, Issue Number
         id: extract
         run: |
