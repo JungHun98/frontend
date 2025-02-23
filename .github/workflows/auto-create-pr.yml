@@ -91,8 +91,8 @@ jobs:
 
       - name: Set Reviewers List
         run: |
-          reviewers="chlwlstlf,JungHun98"
-          echo "REVIEWERS=$(echo $reviewers | tr ',' ' ')" >> $GITHUB_ENV
+          reviewers="chlwlstlf, JungHun98"
+          echo "REVIEWERS=$reviewers" >> $GITHUB_ENV
         
       - name: Create Pull Request (with Assignees & Reviewers)
         if: ${{ !env.EXISTED }}
