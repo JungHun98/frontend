@@ -99,7 +99,7 @@ jobs:
         run: |
           gh pr create --title "${{ env.PR_TITLE }}" --body "${{ env.PR_BODY }}" --base "develop" \
             --label "${{ env.LABELS }}" --assignee "${{ env.ASSIGNEES }}" \
-            --reviewer ${{ env.REVIEWERS }}
+            --reviewer "${{ env.REVIEWERS }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
