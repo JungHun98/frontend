@@ -33,20 +33,6 @@ jobs:
             exit 0
           fi
 
-      - name: Check for Existing PR
-        id: check_pr
-        run: |
-          branch_name=${{ env.BRANCH_NAME }}
-          existing_pr=$(gh pr list --state open -H "$branch_name" -B develop --json number -q '.[] | .number')
-
-          if [ -n "$existing_pr" ]; then
-            echo "EXISTED=TRUE" >> $GITHUB_ENV
-            echo "Already Exist in https://github.com/${{ github.repository }}/pull/$existing_pr"
-            exit 0
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Fetch Issue Details (Assignees & Labels)
         if: ${{ !env.EXISTED }}
         run: |
@@ -56,10 +42,9 @@ jobs:
                             -H "Accept: application/vnd.github.v3+json" \
                             "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number")
 
-          assignees=$(echo "$response" | jq -r '.assignees[].login' | awk '{ORS=","}1' | sed 's/, $//' | rev | cut -c 2- | rev)
+          assignees=$(echo "$response" | jq -r '.assignees[].login' | paste -sd "," -)
           title=$(echo "$response" | jq -r '.title')
-          labels=$(echo "$response" | jq -r '.labels[].name' | tr '\n' ', ' | sed 's/, $//')
-          labels=$(echo "$labels" | rev | cut -c 2- | rev)
+          labels=$(echo "$response" | jq -r '.labels[].name' | paste -sd "," -)
 
           pr_title="${title}(#${issue_number})"
 
@@ -88,14 +73,27 @@ jobs:
           echo "PR_BODY<<EOF" >> $GITHUB_ENV
           echo "$summary" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-        
+
+      - name: Assign Reviewers and Assignees
+        run: |
+          reviewers="chlwlstlf JungHun98"
+          reviewers_list=$(echo "$reviewers" | tr ' ' ',')
+          echo "REVIEWERS=$reviewers_list" >> $GITHUB_ENV
+
       - name: Create Pull Request (with Assignees & Reviewers)
         if: ${{ !env.EXISTED }}
-        run: |
-          gh pr create --title "${{ env.PR_TITLE }}" --body "${{ env.PR_BODY }}" --base "develop" \
-            --label "${{ env.LABELS }}" --assignee "${{ env.ASSIGNEES }}" \
-            --reviewer chlwlstlf --reviewer JungHun98
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-          
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: pr } = await github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: process.env.PR_TITLE,
+              head: process.env.BRANCH_NAME,
+              base: "develop",
+              body: process.env.PR_BODY,
+              labels: process.env.LABELS ? process.env.LABELS.split(',') : [],
+              assignees: process.env.ASSIGNEES ? process.env.ASSIGNEES.split(',') : [],
+              reviewers: process.env.REVIEWERS ? process.env.REVIEWERS.split(',') : []
+            });
