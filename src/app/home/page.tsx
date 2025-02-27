@@ -1,26 +1,19 @@
-import { ALL_HALL_NAME } from './constants/hallName';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Pencil, mainLogo } from '@/assets';
+import { ALL_HALL_IDS } from '@/constants/hallName';
+import { getDisplayName } from '@/utils/hallName';
 
-const Home = () => {
-  const hallLinks = ALL_HALL_NAME.map((name) => {
-    return (
-      <li key={name}>
-        <Link href={`/home/${name}`}>{`home/${name}`}</Link>
-      </li>
-    );
-  });
-
+const HomePage = () => {
   return (
     <div>
-      <div style={{ width: '500px', height: '500px', backgroundColor: 'black' }}>
-        <Image src={mainLogo} alt="로고" width={200} height={50} />
-        <Pencil width={30} height={30} />
-      </div>
-      <ul>{hallLinks}</ul>
+      <ul>
+        {ALL_HALL_IDS.map((id) => (
+          <li key={id}>
+            <Link href={`/home/${id}`}>{getDisplayName(id)}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

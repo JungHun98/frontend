@@ -1,11 +1,10 @@
 import Link from 'next/link';
 
-const Hall = async ({ params }) => {
+const HallPage = async ({ params }) => {
   const { hall } = await params;
 
   return (
     <div>
-      {hall}
       <ul>
         <li>
           <Link href={`/home/${hall}/single`}>{`/home/${hall}/single`}</Link>
@@ -21,4 +20,4 @@ const Hall = async ({ params }) => {
   );
 };
 
-export default Hall;
+export default HallPage;

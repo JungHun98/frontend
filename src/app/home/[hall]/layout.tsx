@@ -1,22 +1,23 @@
-import { ALL_HALL_NAME } from '../constants/hallName';
+import styles from './page.module.scss';
+import Header from '@/components/Header/Header';
+import { ALL_HALL_IDS } from '@/constants/hallName';
+
+interface HallLayoutProps {
+  children: React.ReactNode;
+  params: { hall: string };
+}
 
 export async function generateStaticParams() {
-  const staticParams = ALL_HALL_NAME.map((value) => {
-    return { hall: value };
-  });
-
-  return staticParams;
+  return ALL_HALL_IDS.map((id) => ({ hall: id }));
 }
 
 export const dynamicParams = false;
 
-const HallLayout = async ({ params, children }) => {
-  const { hall } = await params;
-
+const HallLayout = ({ children, params }: HallLayoutProps) => {
   return (
-    <div>
-      <h1>{hall} Page</h1>
-      {children}
+    <div className={styles.hallLayout}>
+      <Header hall={params.hall} />
+      <main className={styles.hallMain}>{children}</main>
     </div>
   );
 };
