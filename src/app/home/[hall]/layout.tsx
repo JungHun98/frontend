@@ -1,4 +1,5 @@
 import styles from './page.module.scss';
+import { ReactNode } from 'react';
 import Header from '@/components/Header/Header';
 import { ALL_HALL_IDS } from '@/constants/hallName';
 
@@ -7,7 +8,7 @@ interface Hall {
 }
 
 interface HallLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<Hall>;
 }
 
