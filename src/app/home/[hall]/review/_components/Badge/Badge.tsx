@@ -1,17 +1,26 @@
+'use client';
+
+import styles from './Badge.module.scss';
+import classNames from 'classnames';
+
 interface BadgeProps {
   text: string;
   onClick: () => void;
-  backgroundStyle: string;
-  contentStyle: string;
+  isSelected: boolean;
+  variant?: 'default' | 'dark';
 }
 
-const Badge = ({ text, onClick, backgroundStyle, contentStyle }: BadgeProps) => {
+const Badge = ({ text, onClick, isSelected, variant = 'default' }: BadgeProps) => {
   return (
-    <div className={backgroundStyle} onClick={onClick}>
-      <span className={contentStyle} aria-label={text}>
+    <button
+      type="button"
+      className={classNames(styles.badge, styles[variant], { [styles.select]: isSelected })}
+      onClick={onClick}
+    >
+      <span className={styles.badgeText} aria-label={text}>
         {text}
       </span>
-    </div>
+    </button>
   );
 };
 
