@@ -4,6 +4,7 @@ import AdditionalSeatInfo from '../AdditionalSeatInfo';
 import ConcertSelect from '../ConcertSelect/ConcertSelect';
 import ReviewInput from '../ReviewInput/ReviewInput';
 import ReviewSection from '../ReviewSection/ReviewSection';
+import SeatImage from '../SeatImage';
 import SeatInfoSelect from '../SeatInfoSelect/SeatInfoSelect';
 import SeatRating from '../SeatRating';
 import ViewBlockInfo from '../ViewBlockInfo';
@@ -60,7 +61,7 @@ const ReviewForm = ({ reviewData, dispatch }: ReviewFormProps) => {
             title={REVIEW.MESSAGE.IMAGE_UPLOAD.TITLE}
             subtitle={REVIEW.MESSAGE.IMAGE_UPLOAD.SUBTITLE}
           />
-          <div>사진 추가</div>
+          <SeatImage images={reviewData.images} dispatch={dispatch} />
         </ReviewSection>
       )}
       {isRender(REVIEW.STEPS.RATING_INFO_SELECT) && (
