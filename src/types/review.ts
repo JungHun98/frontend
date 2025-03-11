@@ -1,9 +1,7 @@
 import { Dispatch } from 'react';
-import { ADDITIONAL_INFO, REVIEW, VIEW_BLOCK_INFO } from '@/constants/review';
+import { REVIEW } from '@/constants/review';
 
 export type Review = (typeof REVIEW.ACTIONS)[keyof typeof REVIEW.ACTIONS];
-export type AdditionalInfo = (typeof ADDITIONAL_INFO)[number];
-export type ViewBlockInfo = (typeof VIEW_BLOCK_INFO)[number];
 
 export type Step = (typeof REVIEW.STEPS)[keyof typeof REVIEW.STEPS];
 
@@ -12,33 +10,33 @@ export interface ImageData {
   previewUrl: string;
 }
 
-export interface SeatInfo {
-  floor: string;
-  section: string;
-  column?: string;
-}
+export type DistanceInfoKey = 'stageDistance' | 'thrustStageDistance' | 'screenDistance';
 
 export interface ReviewData {
-  hall: string;
-  concert: string;
-  seatInfo: SeatInfo;
-  additionalInfo: Set<AdditionalInfo>;
+  stadiumId: number;
+  concertId: number;
+  seatingId: number;
+  features: number[];
   images: ImageData[];
-  seatRating: number[];
-  viewBlockInfo: Set<ViewBlockInfo>;
-  review: string;
+  stageDistance: number;
+  thrustStageDistance: number;
+  screenDistance: number;
+  obstructions: number[];
+  contents: string;
   currentStep: Step;
 }
 
 interface ActionPayload {
-  concert?: string;
-  seatInfo?: SeatInfo;
-  additionalInfo?: AdditionalInfo;
-  images?: ImageData;
+  concertId?: number;
+  seatingId?: number;
+  feature?: number;
+  image?: ImageData;
   removeImageIndex?: number;
-  seatRating?: { index: number; value: number };
-  viewBlockInfo?: ViewBlockInfo;
-  review?: string;
+  stageDistance?: number;
+  thrustStageDistance?: number;
+  screenDistance?: number;
+  obstruction?: number;
+  content?: string;
 }
 
 export interface ReviewAction {
