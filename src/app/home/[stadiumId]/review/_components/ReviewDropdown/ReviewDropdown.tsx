@@ -19,17 +19,23 @@ const ReviewDropdown = ({ value, onChange, options, placeholder }: ReviewDropdow
   const { isDropdownOpen, handleToggleDropdown, dropdownRef } = useDropdown();
 
   return (
-    <Dropdown value={value} onChange={onChange} ref={dropdownRef}>
+    <Dropdown ref={dropdownRef}>
       <Dropdown.Trigger
         as={
           <button
             type="button"
             onClick={handleToggleDropdown}
-            className={classNames(styles.reviewDropdownButton, {
+            className={classNames(styles.reviewDropdownTrigger, {
               [styles.isOpen]: isDropdownOpen,
             })}
           >
-            <span className={value ? '' : styles.placeholder}>{value || placeholder}</span>
+            <span
+              className={classNames(styles.reviewDropdownText, {
+                [styles.placeholder]: !value,
+              })}
+            >
+              {value || placeholder}
+            </span>
             {isDropdownOpen ? <UpArrow /> : <DownArrow />}
           </button>
         }

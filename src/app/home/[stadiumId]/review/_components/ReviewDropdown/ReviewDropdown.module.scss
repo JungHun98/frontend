@@ -1,6 +1,6 @@
 @import '@/styles/style';
 
-.reviewDropdownButton {
+.reviewDropdownTrigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,14 +17,18 @@
   &.isOpen {
     border-radius: 5px 5px 0 0;
   }
+}
 
-  .placeholder {
+.reviewDropdownText {
+  @include subtitle-4;
+
+  &.placeholder {
     color: rgba($sub-white, 0.5);
   }
 }
 
 .reviewDropdownMenu {
-  z-index: 999;
+  z-index: z-index(dropdown);
 
   box-sizing: border-box;
   max-height: 162px;
@@ -33,6 +37,7 @@
   border-radius: 0 0 5px 5px;
 
   background-color: $main-mint6;
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 50%);
 
   @include scrollbar(3px);
 }
@@ -40,4 +45,6 @@
 .reviewDropdownItem {
   padding: 10px 12px;
   color: $sub-gray4;
+
+  @include body-2;
 }

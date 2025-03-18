@@ -2,34 +2,25 @@
 
 import Modal from '../Modal';
 import styles from './DetailViewModal.module.scss';
-import { useRouter } from 'next/navigation';
+import useModal from '@/hooks/useModal';
 import Button from '@/components/Button/Button';
-import { CloseCircle } from '@/assets';
 
 interface DetailViewModalProps {
   children: React.ReactNode;
 }
 
 const DetailViewModal = ({ children }: DetailViewModalProps) => {
-  const router = useRouter();
-  const handleClose = () => {
-    router.back();
-  };
+  const { closeModal } = useModal({ type: 'router' });
 
   return (
-    <Modal overlayStyle="default">
-      <div className={styles.overlay}>
-        <div className={styles.header}>
-          <div className={styles.subtitle}>도면보기</div>
-          <Button className={styles.closeButtonSmall} onClick={handleClose}>
-            <CloseCircle />
-          </Button>
-        </div>
+    <Modal>
+      <Modal.Content>
+        <Modal.Header title="도면보기" onClose={closeModal} />
         <div className={styles.stadiumSection}>{children}</div>
-        <Button className={styles.closeButtonLarge} onClick={handleClose}>
+        <Button variant="secondary" onClick={closeModal}>
           닫기
         </Button>
-      </div>
+      </Modal.Content>
     </Modal>
   );
 };
