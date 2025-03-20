@@ -1,0 +1,11 @@
+.iconContainer {
+  &.overrideColor {
+    svg [fill]:not([fill='none']) {
+      fill: currentcolor;
+    }
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}

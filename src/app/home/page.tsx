@@ -1,13 +1,15 @@
 import HomeNavigation from './_components/HomeNavigation';
 import StadiumNavigation from './_components/StadiumNavigation';
 import styles from './home.module.scss';
+import Icon from '@/components/Icon/Icon';
 import PageExplanation from '@/components/PageExplanation';
-import { IcChat, LargeO } from '@/assets';
+import Spacing from '@/components/Spacing/Spacing';
 
 const HomePage = () => {
   return (
     <div className={styles.homeLayout}>
       <HomeNavigation />
+      <Spacing size={49} />
       <main className={styles.homeMain}>
         <PageExplanation>
           <PageExplanation.Title>
@@ -16,14 +18,15 @@ const HomePage = () => {
             공연장을 선택해주세요
           </PageExplanation.Title>
           <PageExplanation.Subtitle>
-            <IcChat />
+            <Icon icon="IcChat" />
             후기 +{121}
           </PageExplanation.Subtitle>
         </PageExplanation>
         <StadiumNavigation navigationType="active" />
         <StadiumNavigation navigationType="inactive" />
       </main>
-      <LargeO className={styles.svgO} width={201} height={320} />
+      <Icon icon="HomeC" className={styles.svgC} />
+      <Icon icon="LargeO" className={styles.svgO} />
     </div>
   );
 };
