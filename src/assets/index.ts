@@ -6,9 +6,9 @@ export { default as Search } from '@/assets/icons/common/search.svg';
 export { default as UpArrow } from '@/assets/icons/common/up-arrow.svg';
 
 /**************** icons - homePage ****************/
-export { default as IcChat } from '@/assets/icons/homepage/ic-chat.svg';
-export { default as DefaultProfile } from '@/assets/icons/homepage/default-profile.svg';
-export { default as QnA } from '@/assets/icons/homepage/qna.svg';
+export { default as IcChat } from '@/assets/icons/homePage/ic-chat.svg';
+export { default as DefaultProfile } from '@/assets/icons/homePage/default-profile.svg';
+export { default as QnA } from '@/assets/icons/homePage/qna.svg';
 
 /**************** icons - stadiumPage ****************/
 export { default as Compare } from '@/assets/icons/stadiumPage/compare.svg';
