@@ -1,0 +1,35 @@
+@import '@/styles/style';
+
+.slideContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+@mixin nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 10px;
+  align-items: center;
+
+  height: 36px;
+  padding: 6px;
+  border-radius: 18px;
+
+  background: rgb(0 0 0 / 50%);
+}
+
+.prev {
+  @include nav-button;
+
+  left: 20px;
+}
+
+.next {
+  @include nav-button;
+
+  right: 12px;
+}
