@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import useMutateAuth from '@/hooks/mutations/useMutateAuth';
-import MainView from '@/components/MainView/MainView';
 
 const OAuthCallbackPage = () => {
   const router = useRouter();
@@ -18,7 +17,6 @@ const OAuthCallbackPage = () => {
 
   return (
     <div>
-      <MainView />
       <p>로그인 처리 중...</p>
     </div>
   );
