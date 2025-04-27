@@ -1,4 +1,4 @@
-import { getAccessToken } from './getAccessToken';
+import { getAccessToken } from './authUtils';
 
 export const isLoggedIn = async (): Promise<boolean> => {
   const accessToken = await getAccessToken();
