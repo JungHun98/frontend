@@ -1,48 +1,25 @@
 import styles from './MyPage.module.scss';
 import MyHeader from './_components/MyHeader/MyHeader';
-import ReviewCollection from './_components/ReviewCollection/ReviewCollection';
-import UserInfo from './_components/UserInfo';
+import UserInfoContainer from './_components/UserInfoContainer';
+import { HydrationBoundary } from '@tanstack/react-query';
+import { memberQueries } from '@/apis/members/member.query';
+import { reviewQueries } from '@/apis/review/review.query';
+import { createPrefetchedQueryClient } from '@/utils/createPrefetchedQueryClient';
 
-const options = ['옵션1', '옵션2', '옵션3'];
-const reviews = [
-  {
-    reviewId: 1,
-    imageSrc: '/images/kspo-dome.jpg',
-    title: 'KSPO COME',
-    seat: '1구역 5~8열',
-    status: '반려',
-  },
-  { reviewId: 2, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 3, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 4, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 5, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 6, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 7, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 8, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 9, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 10, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 11, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 12, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 13, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-  { reviewId: 14, imageSrc: '/images/kspo-dome.jpg', title: 'KSPO COME', seat: '1구역 5~8열' },
-];
+const MyPage = async () => {
+  const { dehydratedState } = await createPrefetchedQueryClient([
+    memberQueries.info,
+    memberQueries.bookmarkStadiums,
+    reviewQueries.myReviewStadiums,
+  ]);
 
-const MyPage = () => {
   return (
     <div className={styles.pageLayout}>
       <MyHeader />
       <div className={styles.userInfoArea}>
-        <UserInfo
-          thumbnail="/images/jamsil-arena.jpg"
-          nickName="부희주콘"
-          email="j7papa@naver.com"
-        />
-        <ReviewCollection
-          viewNumber={0}
-          reviewNumber={4}
-          filterOptions={options}
-          reviews={reviews}
-        />
+        <HydrationBoundary state={dehydratedState}>
+          <UserInfoContainer />
+        </HydrationBoundary>
       </div>
     </div>
   );

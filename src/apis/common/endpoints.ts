@@ -7,9 +7,17 @@ export const API_ENDPOINTS = {
   SOCIAL_LOGIN: (socialType: SocialType) => `/auth/login/${socialType}`,
   LOGIN: '/auth/login',
 
+  //members
+  MEMBERS: '/members',
+  MEMBERS_BOOKMARK_REVIEW: (stadiumId: number) => `/members/bookmarks?stadiumId=${stadiumId}`,
+  MEMBERS_BOOKMARK: '/members/bookmarks/stadiums',
+  MEMBERS_BOOKMARK_DETAIL: (reviewId: number) => `/members/bookmarks/${reviewId}`,
+
   // review
-  REVIEWS: '/reviews',
+  REVIEWS: (stadiumId: number) => `/reviews?stadiumId=${stadiumId}`,
   REVIEW_IMAGES: '/reviews/images',
+  REVIEW_STADIUMS: '/reviews/stadiums',
+  REVIEW_MY_DETAIL: (reviewId: number) => `/reviews/${reviewId}`,
   REVIEWS_SEATING: (seatingId: number) => `/reviews/seating/${seatingId}`,
   REVIEWS_WITH_PARAMS: (concertId: number, seatingId: number) =>
     `/reviews/concerts/${concertId}/seating/${seatingId}`,
