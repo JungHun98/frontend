@@ -4,16 +4,16 @@ import DetailReviewModal from '../DetailReviewModal';
 import FilterDropdown from '../FilterDropdown';
 import LoadingSpinner from '../LoadingSpinner';
 import styles from './ReviewCollection.module.scss';
-import { UseQueryResult } from '@tanstack/react-query';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import useIntersectionObserver from '@/hooks/common/useIntersectionObserver';
 import useStateModal from '@/hooks/common/useStateModal';
+import type { UseFetchBookmarkReviewList } from '@/hooks/queries/useFetchMember';
+import type { UseFetchMyReviewList } from '@/hooks/queries/useFetchMyReview';
 import Portal from '@/components/Portal/Portal';
-import { MyBookmarkResponse } from '@/apis/members/member.api';
-import { MyReviewResponse } from '@/apis/review/review.api';
 import { MY_PAGE_QUERY, REVIEW_TAP, VIEW_TAP } from '@/constants/myPage';
 import { Stadiums } from '@/types/stadium';
 
@@ -22,8 +22,8 @@ interface ReviewCollectionProps {
   reviewNumber: number;
   stadiums: Stadiums[];
   useFetchReview:
-    | (({ stadiumId }) => UseQueryResult<MyReviewResponse, Error>)
-    | (({ stadiumId }) => UseQueryResult<MyBookmarkResponse, Error>);
+    | ((stadiumId: number) => UseFetchBookmarkReviewList)
+    | ((stadiumId: number) => UseFetchMyReviewList);
 }
 
 interface ReviewStatusTagProps {
@@ -35,8 +35,8 @@ interface ReviewListProps {
   stadium: string;
   onClick: (reviewId: number, status?: string) => void;
   useFetchReview:
-    | (({ stadiumId }) => UseQueryResult<MyReviewResponse, Error>)
-    | (({ stadiumId }) => UseQueryResult<MyBookmarkResponse, Error>);
+    | ((stadiumId: number) => UseFetchBookmarkReviewList)
+    | ((stadiumId: number) => UseFetchMyReviewList);
 }
 
 const ReviewStatusTag = ({ status }: ReviewStatusTagProps) => {
@@ -48,38 +48,55 @@ const ReviewList = ({ stadium, stadiumId, onClick, useFetchReview }: ReviewListP
     notFound();
   }
 
-  const { data, isLoading } = useFetchReview({ stadiumId });
+  const { data, isLoading, status, isLast, handlePage } = useFetchReview(stadiumId);
+  const observerRef = useIntersectionObserver(handlePage);
+  const firstFetchRef = useRef(true);
 
-  if (isLoading) return <LoadingSpinner />;
+  const canFetchNextPage = status !== 'error' && !isLast;
+
+  if (firstFetchRef.current) {
+    firstFetchRef.current = false;
+    return <LoadingSpinner />;
+  }
 
   return (
-    <ul className={styles.reviewList}>
-      {data?.reviews.content.map((elem) => {
-        const { reviewId, seatingName, floorName, sectionName, thumbnailUrl } = elem;
+    <>
+      <ul className={styles.reviewList}>
+        {data?.map((elem) => {
+          const { reviewId, seatingName, floorName, sectionName, thumbnailUrl } = elem;
 
-        return (
-          <li
-            key={reviewId}
-            className={styles.reviewItem}
-            onClick={() => onClick(reviewId, status)}
-          >
-            <div className={styles.reviewImage}>
-              <Image width={100} height={120} alt="" src={thumbnailUrl} />
-            </div>
-            <div className={styles.reviewText}>
-              <div className={styles.title}>{stadium}</div>
-              <div className={styles.seat}>
-                {floorName +
-                  ' ' +
-                  sectionName +
-                  `${seatingName === 'FLOOR' ? '' : ' ' + seatingName}`}
+          return (
+            <li
+              key={reviewId}
+              className={styles.reviewItem}
+              onClick={() => onClick(reviewId, status)}
+            >
+              <div className={styles.reviewImage}>
+                <Image
+                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  width={100}
+                  height={120}
+                  alt="후기 이미지"
+                  src={thumbnailUrl}
+                />
               </div>
-            </div>
-            {elem?.status && <ReviewStatusTag status={elem.status} />}
-          </li>
-        );
-      })}
-    </ul>
+              <div className={styles.reviewText}>
+                <div className={styles.title}>{stadium}</div>
+                <div className={styles.seat}>
+                  {floorName +
+                    ' ' +
+                    sectionName +
+                    `${seatingName === 'FLOOR' ? '' : ' ' + seatingName}`}
+                </div>
+              </div>
+              {elem?.status && <ReviewStatusTag status={elem.status} />}
+            </li>
+          );
+        })}
+      </ul>
+
+      {canFetchNextPage && <div ref={observerRef}>{isLoading && <LoadingSpinner />}</div>}
+    </>
   );
 };
 
