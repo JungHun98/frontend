@@ -1,14 +1,40 @@
 @import '@/styles/style';
 
+.reviewWrapper {
+  position: relative;
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 56px;
+}
+
 .searchFilterContainer {
+  position: sticky;
+  z-index: z-index(floating);
+  top: 56px;
+  transform: translateY(0);
+
   overflow: auto hidden;
   display: flex;
   gap: 13px;
+
   padding: 24px;
+
+  background-color: $sub-bg-black;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+
+  transition: transform 0.2s ease;
 
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.hide {
+  transform: translateY(calc(-100% - 56px));
+}
+
+.show {
+  transform: translateY(0);
 }
 
 .searchResultContainer {
@@ -59,4 +85,27 @@
     color: $sub-gray6;
     text-decoration: underline;
   }
+}
+
+.scrollUpButton {
+  position: fixed;
+  z-index: z-index(floating);
+  right: calc((100vw - #{$modal-width}) / 2 + 16px);
+  bottom: 52px;
+
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  aspect-ratio: 1/1;
+  width: 58px;
+  height: 58px;
+  padding: 10px;
+  border-radius: 50px;
+
+  background-color: rgb(52 58 64 / 50%);
+  backdrop-filter: blur(10px);
+  box-shadow: 5px 5px 10px 0 rgb(0 0 0 / 70%);
 }

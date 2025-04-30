@@ -20,9 +20,10 @@ const AllReviewHeader = ({ stadiumId, seatingId }: AllReviewHeaderProps) => {
         <Icon
           icon="Close"
           size={24}
-          onClick={() => router.push(`/home/${stadiumId}/single/${seatingId}`)}
+          onClick={() => router.replace(`/home/${stadiumId}/single/${seatingId}`)}
         />
       }
+      style={{ backgroundColor: '#1B1C1E', backdropFilter: 'none' }}
     />
   );
 };
