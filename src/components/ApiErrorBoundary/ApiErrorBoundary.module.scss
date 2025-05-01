@@ -1,0 +1,25 @@
+@import '@/styles/style';
+
+.fallbackContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 10px 0;
+
+  .fallbackTitle {
+    @include subtitle-1;
+
+    text-align: center;
+  }
+
+  .errorMessage {
+    @include body-4;
+
+    text-align: center;
+  }
+}

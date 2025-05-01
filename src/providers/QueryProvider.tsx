@@ -1,5 +1,6 @@
 'use client';
 
+import { useErrorContext } from './ErrorProvider';
 import {
   MutationCache,
   QueryCache,
@@ -8,8 +9,9 @@ import {
   isServer,
 } from '@tanstack/react-query';
 import React from 'react';
+import ApiRequestError from '@/utils/ApiRequestError';
 
-function makeQueryClient() {
+function makeQueryClient(setError) {
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -23,13 +25,15 @@ function makeQueryClient() {
       },
     },
     queryCache: new QueryCache({
-      onError: (error) => {
-        alert(error.message); // TODO: 추후 error boundary 또는 toast 처리
+      onError: (error: Error | ApiRequestError) => {
+        if (error instanceof ApiRequestError || error instanceof TypeError) return;
+
+        setError(error);
       },
     }),
     mutationCache: new MutationCache({
-      onError: (error) => {
-        alert(error.message); // TODO: toast 연결
+      onError: (error: Error) => {
+        setError(error);
       },
     }),
   });
@@ -37,17 +41,18 @@ function makeQueryClient() {
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
-function getQueryClient() {
+function getQueryClient(setError) {
   if (isServer) {
-    return makeQueryClient();
+    return makeQueryClient(setError);
   } else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    if (!browserQueryClient) browserQueryClient = makeQueryClient(setError);
     return browserQueryClient;
   }
 }
 
 const QueryProvider = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = getQueryClient();
+  const { setError } = useErrorContext();
+  const queryClient = getQueryClient(setError);
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
