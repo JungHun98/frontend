@@ -1,4 +1,4 @@
-import { auth } from './auth';
+import { auth } from '@/auth';
 import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
