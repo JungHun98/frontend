@@ -2,10 +2,37 @@ import ProgressBar from '../../_components/ProgressBar/ProgressBar';
 import { SINGLE_FUNNEL_STEPS } from '../_constants/funnelSteps';
 import SingleResult from './_components/SingleResult';
 import { HydrationBoundary } from '@tanstack/react-query';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Spacing from '@/components/Spacing/Spacing';
+import { getSeatingReviews } from '@/apis/review/seating.api';
 import { seatingReviewQueries } from '@/apis/review/seating.query';
+import { getStadiumList } from '@/apis/stadium/stadium.api';
 import { createPrefetchedQueryClient } from '@/utils/createPrefetchedQueryClient';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const { stadiumId, seatingId } = await params;
+  const { data: stadiumList } = await getStadiumList();
+  const seatInfo = await getSeatingReviews(Number(seatingId));
+
+  const stadium = stadiumList.active?.find((s) => s.stadiumId === Number(stadiumId));
+
+  const title = `[${stadium?.stadiumName}] ${seatInfo.floorName} ${seatInfo.sectionName}${seatInfo.seatingName ? ' ' + seatInfo.seatingName : ''} 시야`;
+  const description = 'CON:SEAT에서 구역별 시야를 확인해보세요';
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+    },
+    twitter: {
+      title,
+      description,
+    },
+  };
+}
 
 const ResultPage = async ({ params }) => {
   const { stadiumId, seatingId } = await params;
