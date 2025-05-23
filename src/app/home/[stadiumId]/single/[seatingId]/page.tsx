@@ -9,29 +9,28 @@ import { getSeatingReviews } from '@/apis/review/seating.api';
 import { seatingReviewQueries } from '@/apis/review/seating.query';
 import { getStadiumList } from '@/apis/stadium/stadium.api';
 import { createPrefetchedQueryClient } from '@/utils/createPrefetchedQueryClient';
+import { getMetadata } from '@/utils/getMetadata';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const { stadiumId, seatingId } = await params;
+
   const { data: stadiumList } = await getStadiumList();
   const seatInfo = await getSeatingReviews(Number(seatingId));
-
   const stadium = stadiumList.active?.find((s) => s.stadiumId === Number(stadiumId));
 
-  const title = `[${stadium?.stadiumName}] ${seatInfo.floorName} ${seatInfo.sectionName}${seatInfo.seatingName ? ' ' + seatInfo.seatingName : ''} 시야`;
-  const description = 'CON:SEAT에서 구역별 시야를 확인해보세요';
+  if (!stadium) notFound();
 
-  return {
+  const title = `[${stadium.stadiumName}] ${seatInfo.floorName} ${seatInfo.sectionName}${
+    seatInfo.seatingName ? ` ${seatInfo.seatingName}` : ''
+  } 시야`;
+  const description = 'CON:SEAT에서 구역별 시야를 확인해보세요';
+  const ogImage = seatInfo.reviews?.[0]?.images?.[0] || undefined;
+
+  return getMetadata({
     title,
     description,
-    openGraph: {
-      title,
-      description,
-    },
-    twitter: {
-      title,
-      description,
-    },
-  };
+    ogImage,
+  });
 }
 
 const ResultPage = async ({ params }) => {
