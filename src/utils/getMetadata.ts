@@ -4,14 +4,14 @@ import { META } from '@/constants/metadata';
 interface GenerateMetadataProps {
   title?: string;
   description?: string;
-  asPath?: string;
+  asPath?: string; // 동적 메타데이터 생성 시 필수 입력
   ogImage?: string;
 }
 
 export const getMetadata = (metadataProps?: GenerateMetadataProps) => {
   const { title, description, asPath, ogImage } = metadataProps || {};
 
-  const TITLE = title ? `${title} | 콘시트` : META.title;
+  const TITLE = title ? title : META.title;
   const DESCRIPTION = description || META.description;
   const PAGE_URL = asPath ? asPath : META.url;
   const OG_IMAGE = ogImage || META.ogImage;
